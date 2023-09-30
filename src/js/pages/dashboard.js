@@ -3,6 +3,7 @@ import CheckUserAuth from "./auth/check-user-auth";
 const Dashboard = {
   async init() {
     CheckUserAuth.checkLoginState() ; 
+    
     await this._initialData();
     this._initialListener();
   },

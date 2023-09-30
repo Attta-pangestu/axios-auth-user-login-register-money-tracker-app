@@ -25,21 +25,20 @@ const Login = {
     }, 
 
     async _getLogged() {
-        const formData = this._getFormData() ;
-        
-        if(this._validateFormData({...formData})) {
-            console.log('Ini Data Form Data') ; 
-            console.log(formData) ; 
-        }  ; 
-        
         try {
-            const response = await Auth.Login({
+            const formData = this._getFormData() ;
+            
+            if(this._validateFormData({...formData})) {
+                console.log('Ini Data Form Data') ; 
+                console.log(formData) ; 
+            }  ; 
+            const response = await Auth.login({
                 email : formData.email , 
                 password : formData.password,
             }) ;
+            const token = response.data.results.token ; 
             Utlis.setUserToken(Config.USER_TOKEN_KEY, response.data.results.token) ; 
-            window.alert('User process to logged in') ; 
-            
+            window.alert('User process to logged in ', token) ; 
             this._goToDashboard() ; 
         }
         catch(error) {
@@ -48,12 +47,12 @@ const Login = {
     }, 
 
     _getFormData() {
-        const email = document.querySelector('#validationCustomRecordEmail') ; 
-        const password = document.querySelector('#validationCustomRecordEmail') ; 
+        const email = document.querySelector('#validationCustomRecordEmail').value ; 
+        const password = document.querySelector('#validationCustomRecordPass').value ; 
         
         return {
-            email : email.value,
-            password : password.value, 
+            email, 
+            password,
         } ;
     },
 

@@ -5,8 +5,12 @@ const Auth = {
     async register({name, username, email, password}) {
         return await axios.post(ApiEndpoint.REGISTER, {name, username, email, password}) ; 
     }, 
-    async login({username, password}) {
-        return await axios.post(ApiEndpoint.LOGIN, {username, password}) ; 
+    async login({email, password}) {
+        return await axios.post(ApiEndpoint.LOGIN, {email, password}, {
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        }) ; 
     }
 }
 

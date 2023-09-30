@@ -10,13 +10,16 @@ const CheckUserAuth = {
         const isUserOnPage = this._isUserOnPage(this.excludeRedirectPage) ; 
         
         if(isUserSignedIn) {
-            if(isUserOnPage) {
+            if((window.location.pathname.endsWith('login.html'))) {
                 window.location.href = '/' ; 
-            } else {
-                this._showLoginOrUserLogMenu(isUserSignedIn) ;
+                window.alert('Anda Sudah Login') ; 
+            } else  {
+                // this._showLoginOrUserLogMenu(isUserSignedIn) ;
             }
         }else {
-            window.location.href = '/auth/login.html' ; 
+            if(!(window.location.pathname.endsWith('login.html'))) {
+                window.location.href = '/auth/login.html' ; 
+            } 
         }
     }, 
 
@@ -42,6 +45,7 @@ const CheckUserAuth = {
         const filteredPages = pages.filter(item => {
             window.location.pathname.endsWith(item) ; 
         }) ;
+        console.log(filteredPages) ; 
         return Boolean(filteredPages.length) ; 
     },
 }
