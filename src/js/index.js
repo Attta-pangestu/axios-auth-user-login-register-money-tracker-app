@@ -11,6 +11,7 @@ import Edit from './pages/transactions/edit';
 
 // Auth JS
 import Login from './pages/auth/login';
+import Register from './pages/auth/register';
 
 import * as bootstrap from 'bootstrap';
 
@@ -21,6 +22,7 @@ const routes = {
   '/transactions/add.html': Add,
   '/transactions/edit.html': Edit,
   '/auth/login.html' : Login,
+  '/auth/register.html' : Register 
 };
 
 const detectRoute = () => routes[window.location.pathname];

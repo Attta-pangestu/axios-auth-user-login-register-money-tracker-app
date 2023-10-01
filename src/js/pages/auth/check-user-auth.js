@@ -9,15 +9,21 @@ const CheckUserAuth = {
         const isUserSignedIn = Boolean(userToken) ; 
         const isUserOnPage = this._isUserOnPage(this.excludeRedirectPage) ; 
         
+        if(isUserOnPage) {
+            console.log('Berada di halaman pengecualian redirect') ; 
+        } else {
+            console.log('Tidak masuk dalam pengecualian') ;
+        }
+
         if(isUserSignedIn) {
-            if((window.location.pathname.endsWith('login.html'))) {
+            if(isUserOnPage) {
                 window.location.href = '/' ; 
                 window.alert('Anda Sudah Login') ; 
             } else  {
-                // this._showLoginOrUserLogMenu(isUserSignedIn) ;
+                this._showLoginOrUserLogMenu(isUserSignedIn)     ;
             }
         }else {
-            if(!(window.location.pathname.endsWith('login.html'))) {
+            if(!isUserOnPage) {
                 window.location.href = '/auth/login.html' ; 
             } 
         }
@@ -43,9 +49,9 @@ const CheckUserAuth = {
 
     _isUserOnPage(pages) {
         const filteredPages = pages.filter(item => {
-            window.location.pathname.endsWith(item) ; 
+            return window.location.pathname.endsWith(item) ; 
         }) ;
-        console.log(filteredPages) ; 
+        console.log('ini halaman yang difilter',filteredPages) ; 
         return Boolean(filteredPages.length) ; 
     },
 }

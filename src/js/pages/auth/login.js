@@ -33,8 +33,8 @@ const Login = {
                 console.log(formData) ; 
             }  ; 
             const response = await Auth.login({
-                email : formData.email , 
-                password : formData.password,
+                email : formData.email,
+                password: formData.password  
             }) ;
             const token = response.data.results.token ; 
             Utlis.setUserToken(Config.USER_TOKEN_KEY, response.data.results.token) ; 
