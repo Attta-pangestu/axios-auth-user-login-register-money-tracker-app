@@ -1,4 +1,5 @@
 import CheckUserAuth from "./auth/check-user-auth";
+import Transaction from "../network/transactions";
 
 const Dashboard = {
   async init() {
@@ -9,9 +10,11 @@ const Dashboard = {
   },
 
   async _initialData() {
-    const fetchRecords = await fetch('/data/DATA.json');
-    const responseRecords = await fetchRecords.json();
-    this._userTransactionsHistory = responseRecords.results.transactionsHistory;
+    
+    const transactionsData = await this._getTransactionData() ;
+    
+    
+    this._userTransactionsHistory = transactionsData.transactionsHistory;
     this._populateTransactionsRecordToTable(this._userTransactionsHistory);
     this._populateTransactionsDataToCard(this._userTransactionsHistory);
   },
@@ -28,6 +31,19 @@ const Dashboard = {
 
       this._populateDetailTransactionToModal(dataRecord);
     });
+  },
+
+
+  async _getTransactionData() {
+    try {
+      const response = await Transaction.GET_ALL_TRANSACTION() ; 
+      console.log('Ini data fetch transaksi') ; 
+      console.log(response.data.results) ; 
+      return response.data.results ; 
+    }
+    catch(error) {
+      console.log('Terjadi Error Saat Mengambil Data : ', error.data) ; 
+    }
   },
 
   _populateTransactionsDataToCard(transactionsHistory = null) {
