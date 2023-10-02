@@ -1,6 +1,7 @@
 import CheckUserAuth from "./auth/check-user-auth";
 import Transaction from "../network/transactions";
 
+
 const Dashboard = {
   async init() {
     CheckUserAuth.checkLoginState() ; 
@@ -44,7 +45,7 @@ const Dashboard = {
     catch(error) {
       console.log('Terjadi Error Saat Mengambil Data : ', error.data) ; 
     }
-  },
+  }, 
 
   _populateTransactionsDataToCard(transactionsHistory = null) {
     if (!(typeof transactionsHistory === 'object')) {
@@ -140,12 +141,16 @@ const Dashboard = {
             <a class="btn btn-sm btn-primary" href="#"
               data-bs-toggle="modal" data-bs-target="#recordDetailModal" 
               data-record-id="${transactionRecord.id}">
+
               <i class="bi bi-eye-fill me-1"></i>Show
             </a>
+
             <a class="btn btn-sm btn-warning" href="/transactions/edit.html?id=${
               transactionRecord.id
             }">
-              <i class="bi bi-pen-fill me-1"></i>Edit
+              <i 
+                  class="bi bi-pen-fill me-1"
+              ></i>Edit
             </a>
             <a class="btn btn-sm btn-danger" href="#">
               <i class="bi bi-trash3-fill me-1"></i>Delete

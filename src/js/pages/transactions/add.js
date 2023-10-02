@@ -1,5 +1,8 @@
+import Transaction from "../../network/transactions";
+import CheckUserAuth from "../auth/check-user-auth";
 const Add = {
   async init() {
+    CheckUserAuth.checkLoginState() ; 
     this._initialUI();
     this._initialListener();
   },
@@ -42,14 +45,21 @@ const Add = {
     );
   },
 
-  _sendPost() {
+  async _sendPost() {
     const formData = this._getFormData();
 
     if (this._validateFormData({ ...formData })) {
       console.log('formData');
       console.log(formData);
 
-      this._goToDashboardPage();
+      // this._goToDashboardPage();
+      try{
+        const response = await Transaction.addTransaction(formData) ;
+        window.alert('Berhasil Menambahkan Transaksi Baru') ;  
+      }
+      catch(error) {
+        console.log('Terjadi Error Saat Menambahkan Data', error) ; 
+      }
     }
   },
 

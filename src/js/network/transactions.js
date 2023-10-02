@@ -10,7 +10,15 @@ const Transaction = {
                 Authorization : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
             }
         }) ; 
-        return transactionsData ;
+        return transactionsData ; 
+    },
+    async getIdTransaction(id) {
+        const transactionId = await axios.get(ApiEndpoint.GET_ID_TRANSACTION(id), {
+            headers : {
+                Authorization : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}` 
+            }
+        }) ; 
+        return transactionId ; 
     },
     async addTransaction({name, date, amount, type, description, evidence}) {
         return axios.post(ApiEndpoint.GET_ALL_TRANSACTION, {name, date, amount, type,  description, evidence}, {
@@ -19,6 +27,14 @@ const Transaction = {
                 'Authorization' : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
             }
         })  ;
+    }, 
+    async editTransaction( id,{name, date, amount, type, description, evidence}) {
+        return axios.put(ApiEndpoint.EDIT_TRANSACTION(id),{name, date, amount, type, description, evidence}, {
+            headers : {
+                'Content-Type' : 'application/json', 
+                'Authorization' : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
+            }
+        })
     }
 }
 

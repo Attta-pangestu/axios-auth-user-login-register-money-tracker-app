@@ -1,8 +1,11 @@
+import CheckUserAuth from "../auth/check-user-auth";
+import Transaction from "../../network/transactions";
+
 const Edit = {
   async init() {
     this._initialUI();
     await this._initialData();
-    this._initialListener();
+    // this._initialListener();
   },
 
   _initialUI() {
@@ -29,18 +32,19 @@ const Edit = {
   },
 
   async _initialData() {
-    const transactionId = Number(this._getTransactionId());
-
+    const transactionId = this._getTransactionId();
+    console.log('Transaksi IDnya adalah ', transactionId) ; 
     if (!transactionId) {
-      alert('Data dengan id yang dicari tidak ditemukan');
+      alert(`Data dengan id ${transactionId} yang dicari tidak ditemukan`);
       return;
     }
+    // const fetchRecords = await fetch('/data/DATA.json');
+    // const responseRecords = await fetchRecords.json();
+    // const userTransactionsHistory = responseRecords.results.transactionsHistory;
 
-    const fetchRecords = await fetch('/data/DATA.json');
-    const responseRecords = await fetchRecords.json();
-    const userTransactionsHistory = responseRecords.results.transactionsHistory;
-
-    const dataRecord = userTransactionsHistory.find((item) => item.id === transactionId);
+    const dataRecord = await this._getTransactionData(transactionId) ; 
+    console.log('Ini isi dari data Record') ; 
+    console.log(dataRecord) ; 
 
     this._populateTransactionToForm(dataRecord);
   },
@@ -60,15 +64,34 @@ const Edit = {
     );
   },
 
-  _sendPost() {
+  async _getTransactionData(id) {
+      try{
+        const response = await Transaction.getIdTransaction(id) ; 
+        console.log(response) ; 
+        return response.data.results ; 
+      }
+      catch(error) {
+        console.log('Terjadi Error Saat Mengambil Data Transaksi ID : ', error) ; 
+      }
+  }, 
+
+  async _sendPost() {
     const formData = this._getFormData();
 
     if (this._validateFormData({ ...formData })) {
       console.log('formData');
       console.log(formData);
-
       // this._goToDashboardPage();
+    } ; 
+
+    try{
+      const response = await Transaction.editTransaction(Number(this._getTransactionId), formData) ;
+      
     }
+    catch(error) {
+      console.log('Terjadi Error Saat Melakukan Update Transaksi :  ', error) ; 
+    }
+
   },
 
   _getFormData() {
@@ -99,15 +122,16 @@ const Edit = {
     const nameInput = document.querySelector('#validationCustomRecordName');
     const amountInput = document.querySelector('#validationCustomAmount');
     const dateInput = document.querySelector('#validationCustomDate');
-    const evidenceInput = document.querySelector('#validationCustomEvidenceImg');
+    const evidenceInput = document.querySelector('#validationCustomEvidenceImgChange');
     const descriptionInput = document.querySelector('#validationCustomNotes');
     const typesInput = document.querySelectorAll('input[name="recordType"]');
 
     nameInput.value = transactionRecord.name;
     amountInput.value = transactionRecord.amount;
-    dateInput.value = transactionRecord.date;
-    evidenceInput.setAttribute('src', transactionRecord.evidenceUrl);
-    evidenceInput.setAttribute('alt', transactionRecord.name);
+    dateInput.value = transactionRecord.date.slice(0,16);
+    evidenceInput.style.backgroundImage = `url(${transactionRecord.evidenceUrl})`;
+    console.log('Ini link gambarnya ya  ', transactionRecord.evidenceUrl)
+    // evidenceInput.setAttribute('alt', transactionRecord.name);
     descriptionInput.value = transactionRecord.description;
     typesInput.forEach((item) => {
       item.checked = item.value === transactionRecord.type;

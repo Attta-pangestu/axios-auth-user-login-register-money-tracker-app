@@ -23,7 +23,7 @@ class InputImageWithPreview extends LitWithoutShadowDom {
 
   render() {
     return html`
-      <div style="width: 100%; height: 20rem" class="mb-3 ${!this.defaultImage ? 'd-none' : ''}">
+      <div style="width: 100%; height: 20rem" class="mb-3 ">
         ${this._imagePreviewTemplate()}
       </div>
       <input
@@ -54,10 +54,10 @@ class InputImageWithPreview extends LitWithoutShadowDom {
     const reader = new FileReader();
     reader.onload = (event) => {
       if (this.defaultImage) {
-        evidenceRecordImg.classList.add('d-none');
+        // evidenceRecordImg.classList.add('d-none');
       }
-      evidenceImgChange.parentElement.classList.remove('d-none');
-      evidenceImgChange.classList.remove('d-none');
+      // evidenceImgChange.parentElement.classList.remove('d-none');
+      // evidenceImgChange.classList.remove('d-none');
       evidenceImgChange.style.backgroundImage = `url('${event.target.result}')`;
     };
 

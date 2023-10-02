@@ -5,6 +5,9 @@ const Utlis = {
     getUserToken(key) {
         return sessionStorage.getItem(key);
     }, 
+    getTransactionId(event) {
+        
+    }
 }
 
 export default Utlis ; 
