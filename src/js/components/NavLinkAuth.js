@@ -1,6 +1,9 @@
 import LitWithoutShadowDom from './base/LitWithoutShadowDom';
 import { html } from 'lit';
 import { msg, updateWhenLocaleChanges } from '@lit/localize';
+import Utlis from '../utlis/utlis';
+import Config from '../config/config';
+import CheckUserAuth from '../pages/auth/check-user-auth';
 
 class NavLinkAuth extends LitWithoutShadowDom {
   constructor() {
@@ -29,13 +32,19 @@ class NavLinkAuth extends LitWithoutShadowDom {
           <span id="nameUserLogged"></span>
         </a>
         <ul class="dropdown-menu">
-          <a class="dropdown-item" id="userLogOut">
+          <a class="dropdown-item" id="userLogOut" @click=${this._getLoggedOut}>
             ${msg(`Keluar`)}
           </a>
         </ul>
       </li>
     `;
   }
+
+  _getLoggedOut() {
+    Utlis.destroyUserToken(Config.USER_TOKEN_KEY ) ; 
+    CheckUserAuth.checkLoginState() ; 
+  }
+
 }
 
 customElements.define('nav-link-auth', NavLinkAuth);

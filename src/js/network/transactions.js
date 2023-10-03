@@ -35,7 +35,15 @@ const Transaction = {
                 'Authorization' : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
             }
         })
-    }
+    }, 
+
+    async deleteTransactions(id) {
+        return await axios.delete(ApiEndpoint.DEL_TRANSACTION(id), {
+            headers : {
+                'Authorization' : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
+            }
+        })
+    } 
 }
 
 export default Transaction ; 

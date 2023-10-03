@@ -24,13 +24,30 @@ const Dashboard = {
     const recordDetailModal = document.getElementById('recordDetailModal');
     recordDetailModal.addEventListener('show.bs.modal', (event) => {
       const modalTitle = recordDetailModal.querySelector('.modal-title');
-
+      
       const button = event.relatedTarget;
       const dataRecord = this._userTransactionsHistory.find((item) => {
         return item.id == button.dataset.recordId;
       });
 
       this._populateDetailTransactionToModal(dataRecord);
+    });
+
+    const deleteRecordBtns = document.querySelectorAll('#recordsTable tbody a[id^="delete-"]') ; 
+    deleteRecordBtns.forEach((item) => {
+      item.addEventListener('click', 
+        async (event) => {
+          event.preventDefault() ;
+          const idTransaction = event.target.dataset.recordId ;
+          try {
+            const response =  await Transaction.deleteTransactions(idTransaction) ; 
+            window.alert('Berhasil Menghapus Data Transaksi') ; 
+          }
+          catch(error) {
+            console.log(error) ;
+          }
+        }
+      )
     });
   },
 
@@ -152,7 +169,13 @@ const Dashboard = {
                   class="bi bi-pen-fill me-1"
               ></i>Edit
             </a>
-            <a class="btn btn-sm btn-danger" href="#">
+            <a 
+              class="btn btn-sm btn-danger" 
+              href="#"
+              id="delete-${transactionRecord.id}"
+              data-record-id= "${transactionRecord.id}"
+              >
+
               <i class="bi bi-trash3-fill me-1"></i>Delete
             </a>
           </div>
@@ -163,7 +186,6 @@ const Dashboard = {
 
   _templateEmptyBodyTable() {
     const recordHeadTable = document.querySelector('#recordsTable thead');
-
     return `
       <tr>
         <td colspan="${recordHeadTable.querySelectorAll('td,th').length}">
