@@ -5,7 +5,7 @@ const Edit = {
   async init() {
     this._initialUI();
     await this._initialData();
-    // this._initialListener();
+    this._initialListener();
   },
 
   _initialUI() {
@@ -76,17 +76,17 @@ const Edit = {
   }, 
 
   async _sendPost() {
-    const formData = this._getFormData();
+    const formData = await this._getFormData();
 
     if (this._validateFormData({ ...formData })) {
-      console.log('formData');
+      console.log('Ini data hasil perubahannya');
       console.log(formData);
       // this._goToDashboardPage();
     } ; 
 
     try{
-      const response = await Transaction.editTransaction(Number(this._getTransactionId), formData) ;
-      
+      const response = await Transaction.editTransaction(this._getTransactionId(), formData) ;
+      window.alert('Perubahan Transaksi Telah Disimpan') ; 
     }
     catch(error) {
       console.log('Terjadi Error Saat Melakukan Update Transaksi :  ', error) ; 
@@ -94,13 +94,30 @@ const Edit = {
 
   },
 
-  _getFormData() {
+  async _urlToBlob(url) {
+    const response = await fetch(url) ; 
+    return await response.blob() ; 
+  }, 
+
+  async _getFormData() {
     const nameInput = document.querySelector('#validationCustomRecordName');
     const amountInput = document.querySelector('#validationCustomAmount');
     const dateInput = document.querySelector('#validationCustomDate');
-    const evidenceInput = document.querySelector('#validationCustomEvidence');
     const descriptionInput = document.querySelector('#validationCustomNotes');
     const typeInput = document.querySelector('input[name="recordType"]:checked');
+    const evidenceInput = document.querySelector('#validationCustomEvidence');
+
+    // Check apakah user merubah input gambar
+    if(!evidenceInput.files[0]) {
+      const urlFileImage = document.querySelector('#validationCustomEvidenceImgChange').style.backgroundImage.slice(5,-2) ; 
+      try{
+        const imgBlob = await this._urlToBlob(urlFileImage) ; 
+        evidenceInput.files[0] = imgBlob ; 
+      }
+      catch(error) {
+        console.log('Terjadi Error saat merubah url ke file input ', error) ; 
+      }
+    }
 
     return {
       name: nameInput.value,
@@ -122,16 +139,16 @@ const Edit = {
     const nameInput = document.querySelector('#validationCustomRecordName');
     const amountInput = document.querySelector('#validationCustomAmount');
     const dateInput = document.querySelector('#validationCustomDate');
-    const evidenceInput = document.querySelector('#validationCustomEvidenceImgChange');
+    const evidencePreview = document.querySelector('#validationCustomEvidenceImgChange');
     const descriptionInput = document.querySelector('#validationCustomNotes');
     const typesInput = document.querySelectorAll('input[name="recordType"]');
 
     nameInput.value = transactionRecord.name;
     amountInput.value = transactionRecord.amount;
     dateInput.value = transactionRecord.date.slice(0,16);
-    evidenceInput.style.backgroundImage = `url(${transactionRecord.evidenceUrl})`;
+    evidencePreview.style.backgroundImage = `url(${transactionRecord.evidenceUrl})`;
+  
     console.log('Ini link gambarnya ya  ', transactionRecord.evidenceUrl)
-    // evidenceInput.setAttribute('alt', transactionRecord.name);
     descriptionInput.value = transactionRecord.description;
     typesInput.forEach((item) => {
       item.checked = item.value === transactionRecord.type;

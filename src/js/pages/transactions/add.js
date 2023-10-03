@@ -39,11 +39,16 @@ const Add = {
         event.stopPropagation();
 
         addFormRecord.classList.add('was-validated');
+        this._refreshPage() ; 
         this._sendPost();
       },
       false,
     );
   },
+
+  _refreshPage() {
+    window.location.href = '/transactions/add.html' ; 
+  }, 
 
   async _sendPost() {
     const formData = this._getFormData();

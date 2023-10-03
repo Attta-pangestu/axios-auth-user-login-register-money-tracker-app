@@ -29,9 +29,9 @@ const Transaction = {
         })  ;
     }, 
     async editTransaction( id,{name, date, amount, type, description, evidence}) {
-        return axios.put(ApiEndpoint.EDIT_TRANSACTION(id),{name, date, amount, type, description, evidence}, {
+        return await axios.put(ApiEndpoint.EDIT_TRANSACTION(id),{name, date, amount, type, description, evidence}, {
             headers : {
-                'Content-Type' : 'application/json', 
+                'Content-Type' : 'multipart/form-data', 
                 'Authorization' : `Bearer ${Utlis.getUserToken(Config.USER_TOKEN_KEY)}`
             }
         })
